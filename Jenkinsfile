@@ -3,12 +3,12 @@ pipeline {
     
     environment {
         // Network settings
-        REGISTRY_HOST = '192.168.100.191:5000'
+        REGISTRY_HOST = '192.168.100.193:5000'
         APP_NAME = 'vulnerable-app'
         MYSQL_IMAGE = "${REGISTRY_HOST}/mysql:5.7"
         
         // Project settings
-        GIT_REPO = 'https://github.com/trainer04/DevSecOps-demo02.git'
+        GIT_REPO = 'https://github.com/trainer04/DevSecOps-demo02ext.git'
         
         // Docker tags
         BUILD_TAG = "${APP_NAME}:${BUILD_NUMBER}"
@@ -394,7 +394,7 @@ pipeline {
             }
         }
         
-        // Step 4: Pushing to local Registry (.191)
+        // Step 4: Pushing to local Registry (.193)
         stage('Push to Registry') {
             steps {
                 echo "Pushing images to registry ${REGISTRY_HOST}..."
