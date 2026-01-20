@@ -7,6 +7,9 @@ pipeline {
         PROXY_FOR_TOOLS = credentials('proxy-settings')
         NO_PROXY_LIST = 'localhost,127.0.0.1,.local,.internal,192.168.100.0/24'
         
+        // NVD-key
+        NVD_API_KEY = credentials('NVD-key')
+        
         // Network settings
         REGISTRY_HOST = '192.168.100.193:5000'
         APP_NAME = 'vulnerable-app'
