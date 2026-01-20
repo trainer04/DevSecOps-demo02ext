@@ -48,9 +48,21 @@ pipeline {
                         sh '''
                             echo "=== Running Semgrep SAST Scan ==="
                             
+                            # Define proxy settings (adjust these to your proxy server)
+                            export HTTP_PROXY=http://144.31.254.39:9209
+                            export HTTPS_PROXY=http://144.31.254.39:9209
+                            export http_proxy=http://144.31.254.39:9209
+                            export https_proxy=http://144.31.254.39:9209
+                            export NO_PROXY=localhost,192.168.100.0/24,127.0.0.1,.local,.internal
+                            
                             # Scanning source code (./src folder only)
                             docker run --rm -v "$(pwd)/src:/src:ro" \\
                                             -v "$(pwd):/results" \\
+                                -e HTTP_PROXY="${HTTP_PROXY}" \\
+                                -e HTTPS_PROXY="${HTTPS_PROXY}" \\
+                                -e http_proxy="${http_proxy}" \\
+                                -e https_proxy="${https_proxy}" \\
+                                -e NO_PROXY="${NO_PROXY}" \\
                                 semgrep/semgrep:latest \\
                                 semgrep scan \\
                                 --config=auto \\
