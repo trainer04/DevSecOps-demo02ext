@@ -65,7 +65,7 @@ Create Pipeline:<br>
 Save the pipeline<br>
 
 ### Pipeline proxy settings<br>
-To speed-up some network-related operations, the pipene includes proxy configuration, saved in Jenkins credentials store. If you do not use any proxies, just comment or remove the related parameters from the `Jenkinsfile`, like:<br>
+To speed-up some network-related operations, the pipene includes proxy configuration, which is saved in Jenkins credentials store. If you do not use any proxies, just comment or remove the related parameters from the `Jenkinsfile`, like:<br>
 `...PROXY_FOR_TOOLS = credentials('proxy-settings')...`<br>
 and its usage like:<br>
 `...-e HTTP_PROXY="${PROXY_FOR_TOOLS}"...`<br>
