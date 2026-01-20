@@ -51,21 +51,31 @@ pipeline {
                             # Scanning source code (./src folder only)
                             docker run --rm -v "$(pwd)/src:/src:ro" \\
                                             -v "$(pwd):/results" \\
+                                -e SEMGREP_TIMEOUT=300 \\
+                                -e SEMGREP_RULES_TIMEOUT=300 \\
+                                -e SEMGREP_HTTP_TIMEOUT=120 \
                                 semgrep/semgrep:latest \\
                                 semgrep scan \\
                                 --config=auto \\
                                 --json \\
                                 --output=/results/SAST_reports/semgrep-report.json \\
+                                --timeout 300 \\
+                                --timeout-threshold 10 \\
                                 /src
                             
                             # Scanning source code (./src folder only) - to create a human-readable output
                             docker run --rm -v "$(pwd)/src:/src:ro" \\
                                             -v "$(pwd):/results" \\
+                                -e SEMGREP_TIMEOUT=300 \\
+                                -e SEMGREP_RULES_TIMEOUT=300 \\
+                                -e SEMGREP_HTTP_TIMEOUT=120 \
                                 returntocorp/semgrep:latest \\
                                 semgrep scan \\
                                 --config=auto \\
                                 --text \\
                                 --output=/results/SAST_reports/semgrep-results.txt \\
+                                --timeout 300 \\
+                                --timeout-threshold 10 \\
                                 /src
                         '''
                         
