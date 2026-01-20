@@ -2,6 +2,11 @@ pipeline {
     agent any
     
     environment {
+        
+        // Proxy settings (configured in Jenkins)
+        PROXY_FOR_TOOLS = credentials('proxy-settings')
+        NO_PROXY_LIST = 'localhost,127.0.0.1,.local,.internal,192.168.100.0/24'
+        
         // Network settings
         REGISTRY_HOST = '192.168.100.193:5000'
         APP_NAME = 'vulnerable-app'
