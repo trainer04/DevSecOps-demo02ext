@@ -421,25 +421,25 @@ pipeline {
                 echo "Signing Docker image with Cosign using private key from Vault..."
                 script {
                     
-                    def imageRef = $REGISTRY_TAG
+                    def imageRef = env.REGISTRY_TAG
                     
                     // Fetching private key from Vault and passing to cosign with env variable
-                    sh '''
-                        echo "Signing image: env.{imageRef}"
+                    sh """
+                        echo 'Signing image: ${imageRef}'
                         
-                        echo "Fetching Cosign private key from Vault and signing image..."
+                        echo 'Fetching Cosign private key from Vault and signing image...'
                         
-                        export COSIGN_PRIVATE_KEY=$(curl -s \
-                            --header "X-Vault-Token: ${VAULT_TOKEN}" \
+                        export COSIGN_PRIVATE_KEY=\$(curl -s \
+                            --header 'X-Vault-Token: ${VAULT_TOKEN}' \
                             ${VAULT_ADDR}/v1/secret/data/docker-signing/cosign-private \
                             | jq -r .data.data.key)
                 
-                        if [ -z "$COSIGN_PRIVATE_KEY" ]; then
-                            echo "❌ Failed to fetch private key from Vault"
+                        if [ -z '\$COSIGN_PRIVATE_KEY' ]; then
+                            echo '❌ Failed to fetch private key from Vault'
                             exit 1
                         fi
                 
-                        export COSIGN_PASSWORD=$COSIGN_KEY_PASSWORD
+                        export COSIGN_PASSWORD=${COSIGN_KEY_PASSWORD}
                 
                         docker run --rm \
                             -v /var/run/docker.sock:/var/run/docker.sock \
@@ -448,10 +448,10 @@ pipeline {
                             gcr.io/projectsigstore/cosign:v2.2.4 \
                             sign --key env://COSIGN_PRIVATE_KEY \
                                  --yes \
-                                 env.{imageRef}
+                                 ${imageRef}
                         
-                        echo "✅ Image signed successfully!"
-                    '''
+                        echo '✅ Image signed successfully!'
+                    """
                 }
             }
         }
