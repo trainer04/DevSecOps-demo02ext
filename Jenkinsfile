@@ -420,10 +420,15 @@ pipeline {
             steps {
                 echo "Signing Docker image with Cosign using private key from Vault..."
                 script {
+                    
+                    def imageRef = env.REGISTRY_TAG
+                    
                     // Fetching private key from Vault and passing to cosign with env variable
                     sh '''
+                        echo "Signing image: ${imageRef}"
+                        
                         echo "Fetching Cosign private key from Vault and signing image..."
-                
+                        
                         export COSIGN_PRIVATE_KEY=$(curl -s \
                             --header "X-Vault-Token: ${VAULT_TOKEN}" \
                             ${VAULT_ADDR}/v1/secret/data/docker-signing/cosign-private \
@@ -443,7 +448,7 @@ pipeline {
                             gcr.io/projectsigstore/cosign:v2.2.4 \
                             sign --key env://COSIGN_PRIVATE_KEY \
                                  --yes \
-                                 '"\${REGISTRY_TAG}"'
+                                 ${imageRef}
                         
                         echo "✅ Image signed successfully!"
                     '''
