@@ -421,7 +421,7 @@ pipeline {
                 echo "Signing Docker image with Cosign using private key from Vault..."
                 script {
                     
-                    def imageRef = env.REGISTRY_TAG
+                    def imageRef = $REGISTRY_TAG
                     
                     // Fetching private key from Vault and passing to cosign with env variable
                     sh """
