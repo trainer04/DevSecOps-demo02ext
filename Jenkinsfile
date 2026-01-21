@@ -445,8 +445,9 @@ pipeline {
                             -v /var/run/docker.sock:/var/run/docker.sock \
                             -e COSIGN_PRIVATE_KEY \
                             -e COSIGN_PASSWORD \
-                            gcr.io/projectsigstore/cosign:v2.2.4 \
+                            gcr.io/projectsigstore/cosign:latest \
                             sign --key env://COSIGN_PRIVATE_KEY \
+                                 --local \
                                  --yes \
                                  ${imageRef}
                         
