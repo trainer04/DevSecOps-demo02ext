@@ -425,17 +425,17 @@ pipeline {
                     
                     // Fetching private key from Vault and passing to cosign with env variable
                     sh """
-                        echo "Signing image: ${imageRef}"
+                        echo 'Signing image: ${imageRef}'
                         
-                        echo "Fetching Cosign private key from Vault and signing image..."
+                        echo 'Fetching Cosign private key from Vault and signing image...'
                         
                         export COSIGN_PRIVATE_KEY=$(curl -s \
-                            --header "X-Vault-Token: ${VAULT_TOKEN}" \
+                            --header 'X-Vault-Token: ${VAULT_TOKEN}' \
                             ${VAULT_ADDR}/v1/secret/data/docker-signing/cosign-private \
                             | jq -r .data.data.key)
                 
-                        if [ -z "$COSIGN_PRIVATE_KEY" ]; then
-                            echo "❌ Failed to fetch private key from Vault"
+                        if [ -z '$COSIGN_PRIVATE_KEY' ]; then
+                            echo '❌ Failed to fetch private key from Vault'
                             exit 1
                         fi
                 
@@ -450,7 +450,7 @@ pipeline {
                                  --yes \
                                  ${imageRef}
                         
-                        echo "✅ Image signed successfully!"
+                        echo '✅ Image signed successfully!'
                     """
                 }
             }
