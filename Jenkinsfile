@@ -16,7 +16,7 @@ pipeline {
         
         // Cosign
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
-        COSIGN_KEY_PASSWORD = credentials('cosign-key-password')
+        // COSIGN_KEY_PASSWORD = credentials('cosign-key-password')
         
         // Network settings
         REGISTRY_HOST = '192.168.100.193:5000'
@@ -217,7 +217,7 @@ pipeline {
         }
         
         // Step 3.1: Creating Docker image and tagging
-        stage('Build & Tag Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     echo "Build Docker image..."
@@ -434,7 +434,7 @@ pipeline {
                             exit 1
                         fi
                 
-                        export COSIGN_PASSWORD=${COSIGN_KEY_PASSWORD}
+                        export COSIGN_PASSWORD=${credentials('cosign-key-password')}
                 
                         docker run --rm \
                             -v /var/run/docker.sock:/var/run/docker.sock \
