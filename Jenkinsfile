@@ -425,7 +425,7 @@ pipeline {
                     
                     // Fetching private key from Vault and passing to cosign with env variable
                     sh """
-                        echo 'Signing image: ${imageRef}'
+                        echo 'Signing image: \${imageRef}'
                         
                         echo 'Fetching Cosign private key from Vault and signing image...'
                         
@@ -448,7 +448,7 @@ pipeline {
                             gcr.io/projectsigstore/cosign:v2.2.4 \
                             sign --key env://COSIGN_PRIVATE_KEY \
                                  --yes \
-                                 ${imageRef}
+                                 \${imageRef}
                         
                         echo '✅ Image signed successfully!'
                     """
