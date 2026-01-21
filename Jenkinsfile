@@ -448,7 +448,7 @@ pipeline {
                             gcr.io/projectsigstore/cosign:latest \
                             sign --key env://COSIGN_PRIVATE_KEY \
                                  --yes \
-                                 ${imageRef}
+                                 'docker://${imageRef}'
                         
                         echo '✅ Image signed successfully!'
                     """
