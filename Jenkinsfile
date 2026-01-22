@@ -552,6 +552,14 @@ pipeline {
                             
                             echo "\${COSIGN_PUBLIC_KEY}" > /tmp/cosign-pubkey.pub
                             
+                            echo "Creating public key file..."
+                            
+                            rm -f /tmp/cosign-pubkey.pub 2>/dev/null || true
+                            
+                                cat << 'COSIGN_KEY_EOF' > /tmp/cosign-pubkey.pub
+                            ''' + env.COSIGN_PUBLIC_KEY + '''
+                            COSIGN_KEY_EOF
+                            
                             # Checking signature with public key
                             docker run --rm \
                                 -v /var/run/docker.sock:/var/run/docker.sock \
