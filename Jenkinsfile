@@ -542,7 +542,6 @@ pipeline {
                 echo "Verifying Docker image signature with Cosign..."
                 script {
                     def imageToVerify = env.REGISTRY_LATEST
-                    def verificationPassed = false
                     
                     echo "=== Verifying image signature: ${imageToVerify} ==="
                     
@@ -551,12 +550,16 @@ pipeline {
                         sh """
                             echo "Attempting to verify image signature..."
                             
+                            echo "\${COSIGN_PUBLIC_KEY}" > /tmp/cosign-pubkey.pub
+                            
+                            rm -f /tmp/cosign-pubkey.pub
+                            
                             # Checking signature with public key
                             docker run --rm \
                                 -v /var/run/docker.sock:/var/run/docker.sock \
-                                -e COSIGN_PUBLIC_KEY \
+                                -v /tmp/cosign-pubkey.pub:/tmp/cosign-pubkey.pub \
                                 gcr.io/projectsigstore/cosign:latest \
-                                verify --key <(echo "\${COSIGN_PUBLIC_KEY}") \
+                                verify --key /tmp/cosign-pubkey.pub \
                                        --allow-insecure-registry \
                                        ${imageToVerify} 2>&1 | tee /tmp/cosign-verify-output.txt
                             
