@@ -560,6 +560,8 @@ pipeline {
                             ''' + env.COSIGN_PUBLIC_KEY + '''
                             COSIGN_KEY_EOF
                             
+                            less /tmp/cosign-pubkey.pub
+                            
                             # Checking signature with public key
                             docker run --rm \
                                 -v /var/run/docker.sock:/var/run/docker.sock \
@@ -571,7 +573,7 @@ pipeline {
                             
                             rm -f /tmp/cosign-pubkey.pub
                             
-                            less /tmp/verification-status.txt
+                            
                             
                             # Checking the result
                             if [ \${PIPESTATUS[0]} -eq 0 ]; then
