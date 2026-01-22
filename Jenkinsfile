@@ -542,6 +542,7 @@ pipeline {
                 echo "Verifying Docker image signature with Cosign..."
                 script {
                     def imageToVerify = env.REGISTRY_LATEST
+                    def verificationPassed = false
                     
                     echo "=== Verifying image signature: ${imageToVerify} ==="
                     
