@@ -555,34 +555,13 @@ pipeline {
                                 gcr.io/projectsigstore/cosign:latest \
                                 verify --key /cosign.pub \
                                        --allow-insecure-registry \
-                                       ${imageToVerify} 2>&1 | tee /tmp/verification-status.txt
+                                       ${imageToVerify}
                             
-                            # Checking the result
-                            if [ \${PIPESTATUS[0]} -eq 0 ]; then
-                                echo "VERIFICATION_SUCCESS" > /tmp/verification-status.txt
-                            else
-                                echo "VERIFICATION_FAILED" > /tmp/verification-status.txt
-                            fi
+                            echo "✅ Cosign verify command executed successfully"
                         """
                         
-                        def status = readFile('/tmp/verification-status.txt').trim()
-                        if (status == 'VERIFICATION_SUCCESS') {
-                            verificationPassed = true
-                            echo "✅ Image signature verified successfully!"
-                            
-                            // Additional details about the signature
-                            sh """
-                                echo "=== Signature details ==="
-                                docker run --rm \
-                                    -v /var/run/docker.sock:/var/run/docker.sock \
-                                    gcr.io/projectsigstore/cosign:latest \
-                                    verify --key <(echo "\${COSIGN_PUBLIC_KEY}") \
-                                           --allow-insecure-registry \
-                                           --output json \
-                                           ${imageToVerify} 2>/dev/null | \
-                                    jq -r '. | "Digest: \\(.critical.image.docker-manifest-digest)\\nSigner: \\(.optional.\"io.cncf.notary.signingScheme\")" 2>/dev/null || true
-                            """
-                        }
+                        verificationPassed = true
+                        echo "✅ Image signature verified successfully!"
                         
                     } catch (Exception e) {
                         echo "❌ Error during signature verification: ${e.message}"
@@ -591,14 +570,7 @@ pipeline {
                     
                     // If the signature verification failed - asking for the further decision
                     if (!verificationPassed) {
-                        echo "⚠️  WARNING: Image signature verification failed or image is not signed!"
-                        echo "This could indicate:"
-                        echo "1. Image was tampered with"
-                        echo "2. Image was not signed properly"
-                        echo "3. Wrong public key used for verification"
-                        
                         input 'Image signature verification failed. Continue with deployment?'
-                        
                     }
                 }
             }
