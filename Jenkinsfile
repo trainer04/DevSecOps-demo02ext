@@ -548,32 +548,21 @@ pipeline {
                     
                     // Checking the signature
                     try {
+                        
+                        echo "Creating public key file..."
+                        writeFile file: "${WORKSPACE}/cosign-pubkey.pub", text: env.COSIGN_PUBLIC_KEY
+                        
                         sh """
                             echo "Attempting to verify image signature..."
-                            
-                            echo "Creating public key file..."
-                            
-                            rm -f /tmp/cosign-pubkey.pub 2>/dev/null || true
-                            # echo "\${COSIGN_PUBLIC_KEY}" > /tmp/cosign-pubkey.pub
-                            
-                            cat > /tmp/cosign-pubkey.pub << 'COSIGN_KEY_EOF'
-                        ''' + env.COSIGN_PUBLIC_KEY + '''
-                        COSIGN_KEY_EOF
-                            
-                            less /tmp/cosign-pubkey.pub
                             
                             # Checking signature with public key
                             docker run --rm \
                                 -v /var/run/docker.sock:/var/run/docker.sock \
-                                -v /tmp/cosign-pubkey.pub:/tmp/cosign-pubkey.pub \
+                                -v "${WORKSPACE}/cosign-pubkey.pub:/cosign-pubkey.pub:ro" \
                                 gcr.io/projectsigstore/cosign:latest \
                                 verify --key /tmp/cosign-pubkey.pub \
                                        --allow-insecure-registry \
                                        ${imageToVerify} 2>&1 | tee /tmp/verification-status.txt
-                            
-                            rm -f /tmp/cosign-pubkey.pub
-                            
-                            
                             
                             # Checking the result
                             if [ \${PIPESTATUS[0]} -eq 0 ]; then
