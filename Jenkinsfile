@@ -560,7 +560,7 @@ pipeline {
                                 -v /var/run/docker.sock:/var/run/docker.sock \
                                 -v "${WORKSPACE}/cosign-pubkey.pub:/cosign-pubkey.pub:ro" \
                                 gcr.io/projectsigstore/cosign:latest \
-                                verify --key /tmp/cosign-pubkey.pub \
+                                verify --key /cosign-pubkey.pub \
                                        --allow-insecure-registry \
                                        ${imageToVerify} 2>&1 | tee /tmp/verification-status.txt
                             
