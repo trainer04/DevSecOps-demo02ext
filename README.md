@@ -54,10 +54,10 @@ Create Pipeline:<br>
 <br>
 - Select "New Item" - "Pipeline"<br>
 - Set "Name" ("Demo" or something)<br>
-- Set "GitHub project" with an URL to the project (like "https://github.com/trainer04/DevSecOps-demo02.git")<br>
+- Set "GitHub project" with an URL to the project (like "https://github.com/trainer04/DevSecOps-demo02ext.git")<br>
 - Set "Definition" with "Pipeline script from SCM"<br>
 - Set "SCM" as "Git"<br>
-- Set "Repository URL" with your URL (like "https://github.com/trainer04/DevSecOps-demo02.git")<br>
+- Set "Repository URL" with your URL (like "https://github.com/trainer04/DevSecOps-demo02ext.git")<br>
 - Set credentials if necessary (for private repos)<br>
 - Set "Branch Specifier" as "*/main"<br>
 - Set "Script Path" with the path to the Jenkins file (like "Jenkinsfile")<br>
